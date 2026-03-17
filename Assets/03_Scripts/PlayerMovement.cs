@@ -10,11 +10,13 @@ public class PlayerMovement : MonoBehaviour
     public float sprintSpeed = 7f;
     public float crouchSpeed = 2f;
 
-    [Header("Crouch")]
+    [Header("Crouch & Ceiling Check")]
     public float crouchHeight = 1f;
     public float standHeight = 2f;
     public float crouchLerp = 8f;
-    public float cameraCrouchOffset = 0.6f; // Wie tief die Kamera sinkt
+    public float cameraCrouchOffset = 0.6f;
+    public float ceilingCheckDistance = 1.0f; // Wie weit nach oben geprüft wird
+    public LayerMask crouchMask;              // Layer, die als "Decke" gelten (meist Default)
 
     [Header("Headbob")]
     public Transform cameraHolder;
@@ -31,7 +33,7 @@ public class PlayerMovement : MonoBehaviour
 
     float currentSpeed;
     float defaultCamY;
-    float currentCamTargetY; // Die Basis-Höhe (geduckt oder stehend)
+    float currentCamTargetY;
     float bobTimer;
 
     void Start()
@@ -74,6 +76,7 @@ public class PlayerMovement : MonoBehaviour
         input = new Vector2(x, z);
         sprint = Keyboard.current.leftShiftKey.isPressed;
 
+        // Nur wenn C gedrückt wird, geben wir den Befehl zum Toggeln
         if (Keyboard.current.cKey.wasPressedThisFrame)
             crouchPressed = true;
     }
@@ -94,27 +97,45 @@ public class PlayerMovement : MonoBehaviour
         Vector3 target = move * currentSpeed;
 
         Vector3 newVel = new Vector3(target.x, vel.y, target.z);
-
         rb.linearVelocity = Vector3.Lerp(vel, newVel, 10f * Time.fixedDeltaTime);
     }
 
     void HandleCrouch()
     {
-        if (crouchPressed)
+        // Wenn wir aufstehen wollen (isCrouching ist true), prüfen wir, ob Platz ist
+        if (isCrouching && crouchPressed)
         {
-            isCrouching = !isCrouching;
+            if (CanStandUp())
+            {
+                isCrouching = false;
+            }
+            // Falls kein Platz ist, ignorieren wir den Tastendruck einfach
+            crouchPressed = false;
+        }
+        else if (!isCrouching && crouchPressed)
+        {
+            isCrouching = true;
             crouchPressed = false;
         }
 
-        // Ziel-Werte berechnen
         float targetColHeight = isCrouching ? crouchHeight : standHeight;
         float targetCamY = isCrouching ? (defaultCamY - cameraCrouchOffset) : defaultCamY;
 
-        // Collider sanft anpassen
         col.height = Mathf.Lerp(col.height, targetColHeight, Time.deltaTime * crouchLerp);
-
-        // Die Basis-Höhe für die Kamera sanft anpassen (wichtig für Headbob)
         currentCamTargetY = Mathf.Lerp(currentCamTargetY, targetCamY, Time.deltaTime * crouchLerp);
+    }
+
+    // Die Logik für den Decken-Check
+    bool CanStandUp()
+    {
+        // Wir schießen einen Strahl von der Mitte des Spielers nach oben
+        // Startpunkt: Etwas über dem Boden (transform.position)
+        // Richtung: Vector3.up
+        // Länge: ceilingCheckDistance
+        bool hit = Physics.Raycast(transform.position, Vector3.up, ceilingCheckDistance, crouchMask);
+
+        // Wenn hit true ist, ist etwas darüber -> wir können NICHT aufstehen
+        return !hit;
     }
 
     void Headbob()
@@ -129,17 +150,21 @@ public class PlayerMovement : MonoBehaviour
         {
             bobTimer += Time.deltaTime * (isCrouching ? bobSpeed * 0.7f : bobSpeed);
             float yOffset = Mathf.Sin(bobTimer) * bobAmount;
-
-            // Wir addieren den Bobbing-Sinus auf die aktuell berechnete Crouch-Höhe
             pos.y = currentCamTargetY + yOffset;
         }
         else
         {
             bobTimer = 0;
-            // Wenn wir stehen, lerpen wir nur zur Basis-Höhe (geduckt oder stehend)
             pos.y = Mathf.Lerp(pos.y, currentCamTargetY, Time.deltaTime * 5f);
         }
 
         cameraHolder.localPosition = pos;
+    }
+
+    // Hilfreich, um den Raycast im Editor zu sehen
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawRay(transform.position, Vector3.up * ceilingCheckDistance);
     }
 }

@@ -3271,7 +3271,7 @@ GameObject:
   - component: {fileID: 1673260689}
   - component: {fileID: 1673260688}
   - component: {fileID: 1673260687}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4523,6 +4523,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6198090232794399775, guid: 80436ea30c6a9f449abe30b5fbb6cd5b, type: 3}
+      propertyPath: crouchMask.m_Bits
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6198090232794399775, guid: 80436ea30c6a9f449abe30b5fbb6cd5b, type: 3}
+      propertyPath: ceilingCheckDistance
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7008536511642337495, guid: 80436ea30c6a9f449abe30b5fbb6cd5b, type: 3}
       propertyPath: m_Name
       value: Player
