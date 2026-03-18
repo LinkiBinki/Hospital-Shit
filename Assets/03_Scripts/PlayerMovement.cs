@@ -18,6 +18,13 @@ public class PlayerMovement : MonoBehaviour
     public float ceilingCheckDistance = 1.0f; // Wie weit nach oben geprüft wird
     public LayerMask crouchMask;              // Layer, die als "Decke" gelten (meist Default)
 
+    [Header("Step System")]
+    public float stepHeight = 0.45f;
+    public float stepCheckDistance = 0.4f;
+    public float stepUpSpeed = 8f;
+    public float groundSnapForce = 5f;
+    public LayerMask groundMask;
+
     [Header("Headbob")]
     public Transform cameraHolder;
     public float bobSpeed = 7f;
@@ -61,6 +68,8 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate()
     {
         Move();
+        HandleSteps();
+        GroundSnap();
     }
 
     void ReadInput()
@@ -80,7 +89,45 @@ public class PlayerMovement : MonoBehaviour
         if (Keyboard.current.cKey.wasPressedThisFrame)
             crouchPressed = true;
     }
+    void HandleSteps()
+    {
+        Vector3 velocity = rb.linearVelocity;
 
+        if (velocity.magnitude < 0.1f)
+            return;
+
+        Vector3 dir = new Vector3(velocity.x, 0, velocity.z).normalized;
+
+        Vector3 originLow = transform.position + Vector3.up * 0.05f;
+        Vector3 originHigh = transform.position + Vector3.up * stepHeight;
+
+        // check obstacle
+        if (Physics.Raycast(originLow, dir, stepCheckDistance, groundMask))
+        {
+            // check free space above
+            if (!Physics.Raycast(originHigh, dir, stepCheckDistance, groundMask))
+            {
+                // smooth step up via velocity
+                rb.linearVelocity = new Vector3(
+                    velocity.x,
+                    stepUpSpeed,
+                    velocity.z
+                );
+            }
+        }
+    }
+    void GroundSnap()
+    {
+        Ray ray = new Ray(transform.position, Vector3.down);
+
+        if (Physics.Raycast(ray, out RaycastHit hit, 0.6f, groundMask))
+        {
+            if (hit.distance > 0.05f)
+            {
+                rb.linearVelocity += Vector3.down * groundSnapForce;
+            }
+        }
+    }
     void Move()
     {
         if (isCrouching)
