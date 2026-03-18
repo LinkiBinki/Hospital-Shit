@@ -175,13 +175,22 @@ public class PlayerMovement : MonoBehaviour
     // Die Logik für den Decken-Check
     bool CanStandUp()
     {
-        // Wir schießen einen Strahl von der Mitte des Spielers nach oben
-        // Startpunkt: Etwas über dem Boden (transform.position)
-        // Richtung: Vector3.up
-        // Länge: ceilingCheckDistance
-        bool hit = Physics.Raycast(transform.position, Vector3.up, ceilingCheckDistance, crouchMask);
+        float radius = col.radius * 0.9f;
 
-        // Wenn hit true ist, ist etwas darüber -> wir können NICHT aufstehen
+        Vector3 origin = transform.position + Vector3.up * (col.height * 0.5f);
+
+        float checkDistance = standHeight - crouchHeight;
+
+        bool hit = Physics.SphereCast(
+            origin,
+            radius,
+            Vector3.up,
+            out RaycastHit h,
+            checkDistance,
+            crouchMask,
+            QueryTriggerInteraction.Ignore
+        );
+
         return !hit;
     }
 
