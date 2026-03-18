@@ -85,7 +85,7 @@ Camera:
   m_ShutterSpeed: 0.005
   m_Aperture: 16
   m_FocusDistance: 10
-  m_FocalLength: 20.78461
+  m_FocalLength: 14.3010435
   m_BladeCount: 5
   m_Curvature: {x: 2, y: 11}
   m_BarrelClipping: 0.25
@@ -99,8 +99,8 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 20
-  field of view: 60.000004
+  far clip plane: 52
+  field of view: 80
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
@@ -364,7 +364,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.4
+  m_Radius: 0.35
   m_Height: 1.8
   m_Direction: 1
   m_Center: {x: 0, y: 0.9, z: 0}
@@ -381,12 +381,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   walkSpeed: 2.5
-  sprintSpeed: 3.5
+  sprintSpeed: 4
   crouchSpeed: 2
   crouchHeight: 0.8
   standHeight: 1.8
   crouchLerp: 6
   cameraCrouchOffset: 0.5
+  ceilingCheckDistance: 1
+  crouchMask:
+    serializedVersion: 2
+    m_Bits: 0
   cameraHolder: {fileID: 2596439328419697485}
   bobSpeed: 8
   bobAmount: 0.07
@@ -403,5 +407,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MouseLook
   cameraHolder: {fileID: 2596439328419697485}
-  mouseSensitivity: 4
+  mouseSensitivity: 20
   maxLookAngle: 80
