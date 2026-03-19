@@ -47,7 +47,7 @@ public class PlayerInteractor : MonoBehaviour
         {
             if (hit.collider.CompareTag("Interactable"))
             {
-                current = hit.collider.GetComponent<Interactable>();
+                current = hit.collider.GetComponentInParent<Interactable>();
 
                 if (current != null)
                 {

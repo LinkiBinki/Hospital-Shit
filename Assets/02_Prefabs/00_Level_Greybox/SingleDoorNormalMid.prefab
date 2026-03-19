@@ -457,6 +457,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 425319298970689733}
+  - component: {fileID: 5896397673726929249}
   m_Layer: 0
   m_Name: SingleDoorNormalMid
   m_TagString: Untagged
@@ -489,6 +490,25 @@ Transform:
   - {fileID: 3226572274938544331}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5896397673726929249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3508226996846054053}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e87ecaa4902a5b47a4f29292d07f3d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DoorInteractable
+  door: {fileID: 425319298970689733}
+  openAngle: 90
+  speed: 120
+  isLocked: 0
+  shakeAngle: 1
+  shakeCount: 2
+  shakeSpeed: 25
 --- !u!1 &3835880198037704552
 GameObject:
   m_ObjectHideFlags: 0
@@ -949,9 +969,10 @@ GameObject:
   - component: {fileID: 6902538257770449714}
   - component: {fileID: 4660378901967831214}
   - component: {fileID: 6965904732954779726}
+  - component: {fileID: 7082164676250290819}
   m_Layer: 0
   m_Name: Wall (9)
-  m_TagString: Untagged
+  m_TagString: Interactable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1049,6 +1070,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7082164676250290819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6479213198945305871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ee11368b9d70584a807988bc3ec39a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Interactable
 --- !u!1 &7040877642568146010
 GameObject:
   m_ObjectHideFlags: 0
@@ -1063,7 +1096,7 @@ GameObject:
   - component: {fileID: 8729868474174980125}
   m_Layer: 0
   m_Name: Wall (10)
-  m_TagString: Untagged
+  m_TagString: Interactable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
