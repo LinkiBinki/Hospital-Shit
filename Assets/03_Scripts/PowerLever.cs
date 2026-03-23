@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class PowerLever : Interactable
 {
+    [SerializeField] private GameObject On;
+    [SerializeField] private GameObject Off;
+    
     [Header("Welcher Sicherungskasten wird gesteuert?")]
     public FuseHolder fuseHolder;
 
@@ -19,7 +22,15 @@ public class PowerLever : Interactable
         // Hebel umschalten
         isOn = !isOn;
         fuseHolder.powerOn = isOn;
-
-        Debug.Log(isOn ? "Strom eingeschaltet!" : "Strom ausgeschaltet!");
+        if (isOn)
+        {
+            On.gameObject.SetActive(true);
+            Off.gameObject.SetActive(false);
+        }
+        else { 
+            On.gameObject.SetActive(false);
+            Off.gameObject.SetActive(true);
+        }
+            Debug.Log(isOn ? "Strom eingeschaltet!" : "Strom ausgeschaltet!");
     }
 }

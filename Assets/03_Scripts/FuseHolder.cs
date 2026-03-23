@@ -4,6 +4,7 @@ public class FuseHolder : Interactable
 {
     public string requiredItemID;
     private bool isFuseInserted = false;
+    [SerializeField] private GameObject fuse;
 
     [Header("Strom")]
     public bool powerOn = false;
@@ -33,6 +34,7 @@ public class FuseHolder : Interactable
     // Sicherung einsetzen
     public void InsertFuse(string itemID)
     {
+        fuse.gameObject.SetActive(true);
         isFuseInserted = true;
         InventorySystem.Instance.RemoveItem(itemID);
         Debug.Log("Sicherung eingesetzt!");
@@ -41,6 +43,7 @@ public class FuseHolder : Interactable
     // Sicherung wieder rausnehmen
     public void RemoveFuse()
     {
+        fuse.gameObject.SetActive(false);
         isFuseInserted = false;
         InventorySystem.Instance.AddItemByID(requiredItemID);
         Debug.Log("Sicherung wieder entfernt und ins Inventar gelegt!");
