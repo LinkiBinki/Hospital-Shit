@@ -6,23 +6,28 @@ public class PickupItem : Interactable
 
     public override void Interact()
     {
-        // Prüfen, ob wir vor einem FuseHolder stehen
         Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
+
         if (Physics.Raycast(ray, out RaycastHit hit, 3f))
         {
             FuseHolder holder = hit.collider.GetComponent<FuseHolder>();
+
             if (holder != null)
             {
-                // Sicherung direkt in den FuseHolder einsetzen
-                holder.InsertFuse(itemID);
-                gameObject.SetActive(false); // Sicherung verschwindet aus der Welt
-                return;
+                // Nur einsetzen wenn Holder dieses Item braucht
+                if (holder.requiredItemID == itemID)
+                {
+                    holder.InsertFuse(itemID);
+                    gameObject.SetActive(false);
+                    return;
+                }
             }
         }
 
-        // Standard: Sicherung ins Inventar aufnehmen
-        InventorySystem.Instance.AddItem(this);
+        // sonst ins Inventar
+        InventorySystem.Instance.AddItemByID(itemID);
         gameObject.SetActive(false);
-        Debug.Log($"{itemID} ins Inventar gelegt!");
+
+        Debug.Log(itemID + " ins Inventar gelegt");
     }
 }

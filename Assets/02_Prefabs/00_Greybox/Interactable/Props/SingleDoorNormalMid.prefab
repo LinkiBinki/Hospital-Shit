@@ -1016,6 +1016,7 @@ MonoBehaviour:
   openAngle: 90
   speed: 120
   isLocked: 0
+  requiredItemID: 
   shakeAngle: 1
   shakeCount: 2
   shakeSpeed: 25
@@ -1617,7 +1618,6 @@ GameObject:
   - component: {fileID: 4717260472991282768}
   - component: {fileID: 2432659069751985698}
   - component: {fileID: 8729868474174980125}
-  - component: {fileID: 7197144927957619937}
   m_Layer: 0
   m_Name: Wall (10)
   m_TagString: Interactable
@@ -1707,7 +1707,7 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -1718,15 +1718,3 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7197144927957619937
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7040877642568146010}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ee11368b9d70584a807988bc3ec39a3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Interactable

@@ -3,16 +3,20 @@ using UnityEngine.UI;
 
 public class InventoryUI : MonoBehaviour
 {
-    public Image fuseIcon;       // Das Image für die Sicherung
-    public FuseHolder fuseHolder; // Referenz zum FuseHolder
+    [Header("Images")]
+    public Image fuseImage;
+    public Image redKeyImage;
+    public Image blueKeyImage;
 
     void Update()
     {
-        if (fuseHolder == null || fuseIcon == null) return;
+        fuseImage.enabled =
+            InventorySystem.Instance.HasItem("fuse");
 
-        // Zeigt Icon nur an, wenn Sicherung **im Inventar** liegt, nicht im FuseHolder
-        bool inInventory = InventorySystem.Instance.HasItem(fuseHolder.requiredItemID);
+        redKeyImage.enabled =
+            InventorySystem.Instance.HasItem("key_red");
 
-        fuseIcon.enabled = inInventory;
+        blueKeyImage.enabled =
+            InventorySystem.Instance.HasItem("key_blue");
     }
 }

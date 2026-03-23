@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
 public class DoorInteractable : Interactable
@@ -8,8 +8,12 @@ public class DoorInteractable : Interactable
     public float openAngle = 90f;
     public float speed = 120f;
 
-    [Header("Locked")]
+    [Header("Lock")]
     public bool isLocked = false;
+
+    [Tooltip("Wenn leer = kein Schlüssel nötig")]
+    public string requiredItemID = "";
+
     public float shakeAngle = 10f;
     public int shakeCount = 2;
     public float shakeSpeed = 300f;
@@ -20,6 +24,7 @@ public class DoorInteractable : Interactable
     Quaternion closedRot;
     Quaternion openRot;
 
+
     void Start()
     {
         closedRot = door.localRotation;
@@ -28,17 +33,46 @@ public class DoorInteractable : Interactable
 
     public override void Interact()
     {
+        Debug.Log("Interact");
         if (isMoving) return;
 
-        if (isLocked)
+        // 1️⃣ Tür ist NICHT locked → immer öffnen
+        if (!isLocked)
         {
+            StartCoroutine(RotateDoor());
+            Debug.Log("Locked!");
+            return;
+        }
+
+        // 2️⃣ Tür ist locked
+
+        // braucht keinen key → bleibt locked
+        if (string.IsNullOrEmpty(requiredItemID))
+        {
+            Debug.Log("Tür ist abgeschlossen");
             StartCoroutine(ShakeDoor());
+            return;
+        }
+
+        // braucht key → prüfen
+        if (InventorySystem.Instance.HasItem(requiredItemID))
+        {
+            Debug.Log("Schlüssel passt");
+
+            isLocked = false;
+
+            // optional Key verbrauchen
+            // InventorySystem.Instance.RemoveItem(requiredItemID);
+
+            StartCoroutine(RotateDoor());
         }
         else
         {
-            StartCoroutine(RotateDoor());
+            Debug.Log("Schlüssel fehlt");
+            StartCoroutine(ShakeDoor());
         }
     }
+
 
     IEnumerator RotateDoor()
     {
@@ -64,6 +98,7 @@ public class DoorInteractable : Interactable
         isMoving = false;
     }
 
+
     IEnumerator ShakeDoor()
     {
         isMoving = true;
@@ -76,7 +111,6 @@ public class DoorInteractable : Interactable
             Quaternion back =
                 closedRot * Quaternion.Euler(0, -shakeAngle, 0);
 
-            // vor
             while (Quaternion.Angle(door.localRotation, forward) > 0.5f)
             {
                 door.localRotation = Quaternion.RotateTowards(
@@ -88,7 +122,6 @@ public class DoorInteractable : Interactable
                 yield return null;
             }
 
-            // zur�ck
             while (Quaternion.Angle(door.localRotation, back) > 0.5f)
             {
                 door.localRotation = Quaternion.RotateTowards(
@@ -101,7 +134,6 @@ public class DoorInteractable : Interactable
             }
         }
 
-        // zur�ck zur Mitte
         while (Quaternion.Angle(door.localRotation, closedRot) > 0.5f)
         {
             door.localRotation = Quaternion.RotateTowards(

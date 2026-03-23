@@ -5,7 +5,7 @@ public class InventorySystem : MonoBehaviour
 {
     public static InventorySystem Instance;
 
-    private HashSet<string> items = new HashSet<string>(); // IDs der aufgenommenen Items
+    private HashSet<string> items = new HashSet<string>();
 
     void Awake()
     {
@@ -15,35 +15,29 @@ public class InventorySystem : MonoBehaviour
             Destroy(gameObject);
     }
 
-    public void AddItem(PickupItem item)
+    public void AddItemByID(string id)
     {
-        items.Add(item.itemID);
-        Debug.Log($"Inventar: {item.itemID} hinzugefügt.");
+        if (!items.Contains(id))
+        {
+            items.Add(id);
+        }
+    }
+
+    public void RemoveItem(string itemID)
+    {
+        if (items.Contains(itemID))
+        {
+            items.Remove(itemID);
+        }
     }
 
     public bool HasItem(string itemID)
     {
         return items.Contains(itemID);
     }
-    public void RemoveItem(string itemID)
-    {
-        if (items.Contains(itemID))
-        {
-            items.Remove(itemID);
-            Debug.Log($"{itemID} aus Inventar entfernt");
-        }
-    }
 
-    public HashSet<string> GetAllItemIDs()
+    public List<string> GetItems()
     {
-        return items;
-    }
-    public void AddItemByID(string itemID)
-    {
-        if (!items.Contains(itemID))
-        {
-            items.Add(itemID);
-            Debug.Log($"{itemID} ins Inventar gelegt (per ID)");
-        }
+        return new List<string>(items);
     }
 }
