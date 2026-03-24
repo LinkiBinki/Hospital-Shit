@@ -4,33 +4,43 @@ public class PowerLever : Interactable
 {
     [SerializeField] private GameObject On;
     [SerializeField] private GameObject Off;
-    
-    [Header("Welcher Sicherungskasten wird gesteuert?")]
-    public FuseHolder fuseHolder;
+
+    [Header("Welche Sicherungskästen werden gesteuert?")]
+    public FuseHolder[] fuseHolders;
 
     [Header("Hebelzustand")]
-    public bool isOn = false; // Aktueller Zustand des Hebels
+    public bool isOn = false;
 
     public override void Interact()
     {
-        if (fuseHolder == null)
+        if (fuseHolders.Length == 0)
         {
-            Debug.LogWarning("FuseHolder nicht zugewiesen!");
+            Debug.LogWarning("Keine FuseHolder zugewiesen!");
             return;
         }
 
-        // Hebel umschalten
+        // Zustand wechseln
         isOn = !isOn;
-        fuseHolder.powerOn = isOn;
+
+        // ALLE FuseHolder setzen
+        foreach (FuseHolder holder in fuseHolders)
+        {
+            if (holder != null)
+                holder.powerOn = isOn;
+        }
+
+        // Hebel Grafik
         if (isOn)
         {
-            On.gameObject.SetActive(true);
-            Off.gameObject.SetActive(false);
+            On.SetActive(true);
+            Off.SetActive(false);
         }
-        else { 
-            On.gameObject.SetActive(false);
-            Off.gameObject.SetActive(true);
+        else
+        {
+            On.SetActive(false);
+            Off.SetActive(true);
         }
-            Debug.Log(isOn ? "Strom eingeschaltet!" : "Strom ausgeschaltet!");
+
+        Debug.Log(isOn ? "Strom eingeschaltet!" : "Strom ausgeschaltet!");
     }
 }

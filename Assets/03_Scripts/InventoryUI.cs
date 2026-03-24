@@ -7,16 +7,20 @@ public class InventoryUI : MonoBehaviour
     public Image fuseImage;
     public Image redKeyImage;
     public Image blueKeyImage;
+    public Image SchraubendreherImage;
 
     void Update()
     {
         fuseImage.enabled =
-            InventorySystem.Instance.HasItem("fuse");
+            InventorySystem.Instance.HasItem("Sicherung");
 
         redKeyImage.enabled =
-            InventorySystem.Instance.HasItem("key_red");
+            InventorySystem.Instance.HasItem("S1_Karte");
 
         blueKeyImage.enabled =
-            InventorySystem.Instance.HasItem("key_blue");
+            InventorySystem.Instance.HasItem("S2_Karte");
+
+        blueKeyImage.enabled =
+             InventorySystem.Instance.HasItem("Schraubendreher");
     }
 }
