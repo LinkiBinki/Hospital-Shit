@@ -20,7 +20,7 @@ public class InventoryUI : MonoBehaviour
         blueKeyImage.enabled =
             InventorySystem.Instance.HasItem("S2_Karte");
 
-        blueKeyImage.enabled =
+        SchraubendreherImage.enabled =
              InventorySystem.Instance.HasItem("Schraubendreher");
     }
 }
